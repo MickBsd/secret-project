@@ -51,7 +51,7 @@ function displayOrHideComponent() {
   }
 }
 
-/* Block pour voir l'indexation du sous domaine
+/* Block pour voir l'indexation du sous domaine, ajouter d'autre toggle
 
 function runSeoTab() {
     const indexingToggle = document.querySelector(".switch");
