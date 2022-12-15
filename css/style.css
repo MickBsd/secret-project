@@ -1,0 +1,36 @@
+.sp-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: bold !important;
+}
+
+.sp-button:hover {
+    color: #cfcfcf !important;}
+
+.sp-component {
+    width: 200px;
+    position: absolute;
+    z-index: 9999;
+    background-color: rgb(64, 64, 64);
+    color: rgb(217, 217, 217);
+    font-size: 0.75rem;
+    line-height: 1.33333;
+    inset: 34px auto 0px 35px;
+    border-top: 1px solid rgb(26, 26, 26);
+    border-right: 1px solid rgb(26, 26, 26);
+    border-bottom: 1px solid rgb(26, 26, 26);
+}
+
+.sp-component-bar {
+    width: 6px;
+    background-color: rgb(77, 77, 77);
+    border-right: 1px solid rgb(26, 26, 26);
+}
+
+.advertizing {
+    height: auto;
+    width: auto;
+    padding-top: 20px;
+}
+

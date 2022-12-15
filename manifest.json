@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "Secret project",
+    "version": "0.1",
+    "description": "A Webflow SEO extension",
+    "author": "Benoît Eveillard & Mickaël Boussard",
+    "action": 
+        {
+            "default_popup": "hello.html"
+        },
+    "permissions": 
+        [
+            "activeTab"
+        ],
+    "content_scripts":
+        [
+            {
+                "js": ["scripts/content.js"],
+                "css": ["css/style.css"],
+                "matches": [
+                    "https://webflow.com/design/*", 
+                    "https://webflow.com/dashboard/sites/*"
+                ]
+            }
+        ]
+  }
