@@ -12,9 +12,10 @@ function buttonCreation() {
   const sidebar = document.querySelector(".left-sidebar-links");
   const spButton = document.createElement("div");
   spButton.classList.add("button");
+  spButton.classList.add("top");
   spButton.classList.add("sp-button");
   spButton.textContent = "SP";
-  spButton.style.color = "#8c8c8c";
+  spButton.style.color = "#9f9f9f";
   sidebar.appendChild(spButton);
   spButton.addEventListener("click", displayOrHideComponent);
 }
@@ -23,12 +24,23 @@ function panelCreation() {
   const body = document.querySelector("body");
   const spComponent = document.createElement("div");
   const spComponentBar = document.createElement("div");
+  const spComponentTitle = document.createElement("h2");
+  const spComponentClose = document.createElement("div");
   spComponent.classList.add("sp-component");
   spComponentBar.classList.add("sp-component-bar");
+  spComponentTitle.classList.add("sp-title");
+  spComponentTitle.textContent = "Secret Project";
+  spComponentClose.classList.add("sp-close");
+  spComponentClose.textContent = "X";
   spComponent.style.display = "none";
   spComponentBar.style.display = "none";
+
   body.appendChild(spComponent);
   spComponent.appendChild(spComponentBar);
+  spComponent.appendChild(spComponentTitle);
+  spComponentTitle.appendChild(spComponentClose);
+
+  spComponentClose.addEventListener("click", displayOrHideComponent);
 }
 
 function displayOrHideComponent() {
@@ -37,15 +49,13 @@ function displayOrHideComponent() {
   const spButton = document.querySelector(".sp-button");
 
   if (spComponent.style.display === "none") {
-    spButton.style.backgroundColor = "rgb(77, 77, 77)";
     spButton.style.color = "#cfcfcf";
-    spButton.style.borderRight = "none";
+    spButton.classList.toggle("active");
     spComponent.style.display = "flex";
     spComponentBar.style.display = "block";
   } else {
-    spButton.style.backgroundColor = "rgb(64, 64, 64)";
-    spButton.style.color = "#8c8c8c";
-    spButton.style.borderRight = "1px solid rgb(26, 26, 26)";
+    spButton.style.color = "#9f9f9f";
+    spButton.classList.toggle("active");
     spComponent.style.display = "none";
     spComponentBar.style.display = "none";
   }
@@ -67,8 +77,8 @@ function runSeoTab() {
     console.log(toggleValue.textContent);
     console.log(seoBlock);
 
-    indexingToggle.addEventListener("click", (e) => {
-      console.log(e); 
+    indexingToggle.addEventListener("click", (event) => {
+      console.log(event); 
 
       if (toggleValue.textContent === "No") {
           console.log("c'est no");
