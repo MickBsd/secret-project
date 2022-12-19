@@ -4,8 +4,18 @@ window.addEventListener("load", () => {
 });
 
 function init() {
-  buttonCreation();
-  panelCreation();
+  let url = window.location.href;
+  if (url.includes("design")) {
+    console.log("In the designer");
+    buttonCreation();
+    panelCreation();
+  } else if (url.includes("seo")) {
+    console.log("In the SEO tab");
+    runSeoTab();
+  } else if (url.includes("publishing")) {
+    console.log("In the publishing tab");
+    runPublishingTab();
+  }
 }
 
 function buttonCreation() {
@@ -34,12 +44,10 @@ function panelCreation() {
   spComponentClose.textContent = "X";
   spComponent.style.display = "none";
   spComponentBar.style.display = "none";
-
   body.appendChild(spComponent);
   spComponent.appendChild(spComponentBar);
   spComponent.appendChild(spComponentTitle);
   spComponentTitle.appendChild(spComponentClose);
-
   spComponentClose.addEventListener("click", displayOrHideComponent);
 }
 
@@ -47,7 +55,6 @@ function displayOrHideComponent() {
   const spComponent = document.querySelector(".sp-component");
   const spComponentBar = document.querySelector(".sp-component-bar");
   const spButton = document.querySelector(".sp-button");
-
   if (spComponent.style.display === "none") {
     spButton.style.color = "#cfcfcf";
     spButton.classList.toggle("active");
@@ -61,37 +68,41 @@ function displayOrHideComponent() {
   }
 }
 
-/* Block pour voir l'indexation du sous domaine, 
-
 function runSeoTab() {
-    const indexingToggle = document.querySelector(".switch");
-    const toggleValue = indexingToggle.lastChild;
     const seoBlock = document.querySelector("#search-engine-optimization");
+    const statusWrapper = document.createElement("div");
+    const index = document.createElement("span");
+    const sitemap = document.createElement("span");
+    const toggle = document.querySelectorAll(".switch-description");
+    console.log(toggle);
+    statusWrapper.classList.add("status-wrapper");
+    index.classList.add("seo-toggle-status");
+    sitemap.classList.add("seo-toggle-status");
+    statusWrapper.appendChild(index);
+    statusWrapper.appendChild(sitemap);
+    seoBlock.appendChild(statusWrapper);
 
-    const advertizing = document.createElement("span");
-    advertizing.classList.add("advertizing");
+    if (toggle[0].textContent.includes("enabled")) {
+      index.style.color = "red";
+      index.textContent = "!!   Votre sous domaine est indéxé. ";
+      index.style.fontWeight = "bold";
+    } else {
+      index.textContent = "=D   Votre sous-domaine est désindexé.";
+      index.style.color = "green";
+      index.style.fontWeight = "bold";
+    }
 
-    seoBlock.appendChild(advertizing);
-
-    console.log(indexingToggle);
-    console.log(toggleValue.textContent);
-    console.log(seoBlock);
-
-    indexingToggle.addEventListener("click", (event) => {
-      console.log(event); 
-
-      if (toggleValue.textContent === "No") {
-          console.log("c'est no");
-          advertizing.style.color = "red";
-          advertizing.textContent = "!!   Votre sous domaine est indéxé. ";
-          advertizing.style.fontWeight = "bold";
-      } else {
-          console.log("c'est yes");
-          advertizing.textContent = "=D   Votre sous-domaine est désindexé.";
-          advertizing.style.color = "green";
-          advertizing.style.fontWeight = "bold";
-      }
-  });
+    if (toggle[1].textContent.includes("custom")) {
+      sitemap.style.color = "red";
+      sitemap.textContent = "!!   Votre sitemap n'est pas généré. ";
+      sitemap.style.fontWeight = "bold";
+    } else {
+      sitemap.textContent = "=D   Votre sitemap est généré.";
+      sitemap.style.color = "green";
+      sitemap.style.fontWeight = "bold";
+    }
 }
 
-*/
+function runPublishingTab() {
+  console.log("run publishing function");
+}

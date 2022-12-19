@@ -62,7 +62,12 @@
     border-right: 1px solid rgb(26, 26, 26);
 }
 
-.advertizing {
+.status-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.index, .sitemap {
     height: auto;
     width: auto;
     padding-top: 20px;
