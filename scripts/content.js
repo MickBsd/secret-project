@@ -1,6 +1,6 @@
 window.addEventListener("load", () => {
   console.log("DOM entièrement chargé et analysé");
-  setTimeout(init, 2000);
+  setTimeout(init, 1500);
 });
 
 function init() {
@@ -9,8 +9,18 @@ function init() {
     console.log("In the designer");
     buttonCreation();
     panelCreation();
+  } else if (url.includes("general")) {
+    console.log("In the general tab");
+    const seo = document.querySelector(".seo");
+    console.log(seo);
+    seo.addEventListener("click", ()=> {
+      console.log("click");
+      setTimeout(runSeoTab, 1500);
+    });
+
   } else if (url.includes("seo")) {
     console.log("In the SEO tab");
+    //const seo = document.querySelector(".seo");
     runSeoTab();
   } else if (url.includes("publishing")) {
     console.log("In the publishing tab");
@@ -33,22 +43,35 @@ function buttonCreation() {
 function panelCreation() {
   const body = document.querySelector("body");
   const spComponent = document.createElement("div");
+  const componentWrapper = document.createElement("div");
   const spComponentBar = document.createElement("div");
   const spComponentTitle = document.createElement("h2");
   const spComponentClose = document.createElement("div");
+  const crawlBtn = document.createElement("button");
+
   spComponent.classList.add("sp-component");
+  componentWrapper.classList.add("component-wrapper");
   spComponentBar.classList.add("sp-component-bar");
   spComponentTitle.classList.add("sp-title");
-  spComponentTitle.textContent = "Secret Project";
   spComponentClose.classList.add("sp-close");
+  crawlBtn.classList.add("crawl-btn");
+
+  spComponentTitle.textContent = "Secret Project";
   spComponentClose.textContent = "X";
+  crawlBtn.textContent = "Run SEO audit";
+
   spComponent.style.display = "none";
   spComponentBar.style.display = "none";
+
   body.appendChild(spComponent);
   spComponent.appendChild(spComponentBar);
-  spComponent.appendChild(spComponentTitle);
+  spComponent.appendChild(componentWrapper);
+  componentWrapper.appendChild(spComponentTitle);
+  componentWrapper.appendChild(crawlBtn);
   spComponentTitle.appendChild(spComponentClose);
   spComponentClose.addEventListener("click", displayOrHideComponent);
+
+  crawlBtn.addEventListener("click", runSeoAudit);
 }
 
 function displayOrHideComponent() {
@@ -77,7 +100,9 @@ function runSeoTab() {
     console.log(toggle);
     statusWrapper.classList.add("status-wrapper");
     index.classList.add("seo-toggle-status");
+    index.setAttribute("id", "index");
     sitemap.classList.add("seo-toggle-status");
+    sitemap.setAttribute("id", "sitemap");
     statusWrapper.appendChild(index);
     statusWrapper.appendChild(sitemap);
     seoBlock.appendChild(statusWrapper);
@@ -106,3 +131,11 @@ function runSeoTab() {
 function runPublishingTab() {
   console.log("run publishing function");
 }
+
+function runSeoAudit() {
+  const url = window.location.href;
+  const urlParts = url.split("/");
+  const urlLastPart = urlParts[urlParts.length - 1];
+  console.log(urlLastPart);
+  window.location.href = `https://webflow.com/dashboard/sites/${urlLastPart}/seo`;
+  }
