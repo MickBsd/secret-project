@@ -9,6 +9,11 @@ function init() {
     console.log("In the designer");
     buttonCreation();
     panelCreation();
+
+    if (sessionStorage.getItem("isFinishedAudit")) {
+      alert("Audit finished");
+    }
+
   } else if (url.includes("general")) {
     console.log("In the general tab");
     const seo = document.querySelector(".seo");
@@ -20,11 +25,26 @@ function init() {
 
   } else if (url.includes("seo")) {
     console.log("In the SEO tab");
-    //const seo = document.querySelector(".seo");
-    runSeoTab();
+    //runSeoTab();
+
+    //If run audit launch
+    let isRunAudit = sessionStorage.getItem("isRunAudit");
+    console.log(isRunAudit);    
+    if (isRunAudit) {
+      runSeoAudit();
+    }
+
   } else if (url.includes("publishing")) {
     console.log("In the publishing tab");
-    runPublishingTab();
+    //runPublishingTab();
+
+    //If run audit launch
+    let isRunAudit = sessionStorage.getItem("isRunAudit");
+    console.log(isRunAudit);    
+    if (isRunAudit) {
+      runPublishingAudit();
+    }
+
   }
 }
 
@@ -71,7 +91,12 @@ function panelCreation() {
   spComponentTitle.appendChild(spComponentClose);
   spComponentClose.addEventListener("click", displayOrHideComponent);
 
-  crawlBtn.addEventListener("click", runSeoAudit);
+  crawlBtn.addEventListener("click", function () {
+    sessionStorage.setItem("isRunAudit", true);
+    console.log("click");
+    console.log(sessionStorage.getItem("isRunAudit"));
+    runAudit();
+  });
 }
 
 function displayOrHideComponent() {
@@ -132,10 +157,37 @@ function runPublishingTab() {
   console.log("run publishing function");
 }
 
-function runSeoAudit() {
+function runAudit() {
   const url = window.location.href;
   const urlParts = url.split("/");
   const urlLastPart = urlParts[urlParts.length - 1];
   console.log(urlLastPart);
   window.location.href = `https://webflow.com/dashboard/sites/${urlLastPart}/seo`;
-  }
+}
+
+function runSeoAudit() {
+  //check toggle status x2, sitemap and robot.txt in seo tab
+  console.log("run seo audit function");
+  const url = window.location.href;
+  const urlParts = url.split("/");
+  const urlLastPart = urlParts[urlParts.length - 2];
+  console.log(url);
+  console.log(urlParts);
+  console.log(urlLastPart);
+  setTimeout(window.location.href = `https://webflow.com/dashboard/sites/${urlLastPart}/publishing`,5000)
+}
+
+function runPublishingAudit() {
+  //check toggle status in publishing tab
+  console.log("run publishing audit function");
+  const url = window.location.href;
+  const urlParts = url.split("/");
+  const urlLastPart = urlParts[urlParts.length - 2];
+  console.log(url);
+  console.log(urlParts);
+  console.log(urlLastPart);
+  sessionStorage.removeItem("isRunAudit");
+  sessionStorage.setItem("isFinishedAudit", true);
+  console.log(sessionStorage.getItem("isRunAudit"));
+  setTimeout(window.location.href = `https://webflow.com/design/${urlLastPart}`,5000)
+}
