@@ -7,11 +7,11 @@ function init() {
   let url = window.location.href;
   if (url.includes("design")) {
     console.log("In the designer");
-    buttonCreation();
-    panelCreation();
+    createButton();
+    createPanel();
 
     if (sessionStorage.getItem("isFinishedAudit")) {
-      alert("Audit finished");
+      console.log("Audit finished");
     }
 
   } else if (url.includes("general")) {
@@ -19,17 +19,15 @@ function init() {
     const seo = document.querySelector(".seo");
     console.log(seo);
     seo.addEventListener("click", ()=> {
-      console.log("click");
       setTimeout(runSeoTab, 1500);
     });
 
   } else if (url.includes("seo")) {
     console.log("In the SEO tab");
-    //runSeoTab();
+    runSeoTab();
 
     //If run audit launch
     let isRunAudit = sessionStorage.getItem("isRunAudit");
-    console.log(isRunAudit);    
     if (isRunAudit) {
       runSeoAudit();
     }
@@ -40,7 +38,6 @@ function init() {
 
     //If run audit launch
     let isRunAudit = sessionStorage.getItem("isRunAudit");
-    console.log(isRunAudit);    
     if (isRunAudit) {
       runPublishingAudit();
     }
@@ -48,7 +45,7 @@ function init() {
   }
 }
 
-function buttonCreation() {
+function createButton() {
   const sidebar = document.querySelector(".left-sidebar-links");
   const spButton = document.createElement("div");
   spButton.classList.add("button");
@@ -60,7 +57,7 @@ function buttonCreation() {
   spButton.addEventListener("click", displayOrHideComponent);
 }
 
-function panelCreation() {
+function createPanel() {
   const body = document.querySelector("body");
   const spComponent = document.createElement("div");
   const componentWrapper = document.createElement("div");
@@ -93,7 +90,6 @@ function panelCreation() {
 
   crawlBtn.addEventListener("click", function () {
     sessionStorage.setItem("isRunAudit", true);
-    console.log("click");
     console.log(sessionStorage.getItem("isRunAudit"));
     runAudit();
   });
@@ -121,15 +117,29 @@ function runSeoTab() {
     const statusWrapper = document.createElement("div");
     const index = document.createElement("span");
     const sitemap = document.createElement("span");
+    const robotsTxt = document.createElement("span");
+    const canonical = document.createElement("span");
+
     const toggle = document.querySelectorAll(".switch-description");
+    const textAreas = document.querySelectorAll("textarea");
+    const canonicalBalise = document.querySelector("input[name='globalCanonicalTag']");
     console.log(toggle);
+    console.log(textAreas);
+    console.log(canonicalBalise);
+  
     statusWrapper.classList.add("status-wrapper");
     index.classList.add("seo-toggle-status");
     index.setAttribute("id", "index");
     sitemap.classList.add("seo-toggle-status");
     sitemap.setAttribute("id", "sitemap");
+    robotsTxt.classList.add("seo-toggle-status");
+    robotsTxt.setAttribute("id", "robotsTxt");
+    canonical.classList.add("seo-toggle-status");
+    canonical.setAttribute("id", "canonicalBalise");
     statusWrapper.appendChild(index);
     statusWrapper.appendChild(sitemap);
+    statusWrapper.appendChild(robotsTxt);
+    statusWrapper.appendChild(canonical);
     seoBlock.appendChild(statusWrapper);
 
     if (toggle[0].textContent.includes("enabled")) {
@@ -151,6 +161,26 @@ function runSeoTab() {
       sitemap.style.color = "green";
       sitemap.style.fontWeight = "bold";
     }
+
+    if (textAreas[0].value === "" ) {
+      robotsTxt.style.color = "red";
+      robotsTxt.textContent = "!!   Votre robots.txt est vide. ";
+      robotsTxt.style.fontWeight = "bold";
+    } else {
+      robotsTxt.textContent = "=D   Votre robots.txt est généré.";
+      robotsTxt.style.color = "green";
+      robotsTxt.style.fontWeight = "bold";
+    }
+
+    if (canonicalBalise.value === "" ) {
+      canonical.style.color = "red";
+      canonical.textContent = "!!   Votre balise canonical est vide. ";
+      canonical.style.fontWeight = "bold";
+    } else {
+      canonical.textContent = "=D   Votre balise canonical est générée.";
+      canonical.style.color = "green";
+      canonical.style.fontWeight = "bold";
+    }
 }
 
 function runPublishingTab() {
@@ -158,6 +188,14 @@ function runPublishingTab() {
 }
 
 function runAudit() {
+  const loader = document.createElement("div");
+  const loaderText = document.createElement("p");
+  loader.classList.add("loader");
+  loaderText.classList.add("loader-text");
+  loaderText.textContent = "Audit in progress...";
+  loader.appendChild(loaderText);
+  document.querySelector("body").appendChild(loader);
+
   const url = window.location.href;
   const urlParts = url.split("/");
   const urlLastPart = urlParts[urlParts.length - 1];
