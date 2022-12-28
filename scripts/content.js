@@ -1,3 +1,5 @@
+import * as runSeoTab from './seoTab.js';
+
 window.addEventListener("load", () => {
   console.log("DOM entièrement chargé et analysé");
   setTimeout(init, 1500);
@@ -18,7 +20,8 @@ function init() {
     console.log("In the general tab");
     const seo = document.querySelector(".seo");
     console.log(seo);
-    seo.addEventListener("click", ()=> {
+    seo.addEventListener("click", () => {
+      console.log("go seo tab");
       setTimeout(runSeoTab, 1500);
     });
 
