@@ -1,5 +1,3 @@
-import * as runSeoTab from './seoTab.js';
-
 window.addEventListener("load", () => {
   console.log("DOM entièrement chargé et analysé");
   setTimeout(init, 1500);
@@ -14,6 +12,8 @@ function init() {
 
     if (sessionStorage.getItem("isFinishedAudit")) {
       console.log("Audit finished");
+      let test = localStorage.getItem("auditResult");
+      console.log(JSON.parse(test));
     }
 
   } else if (url.includes("general")) {
@@ -28,7 +28,6 @@ function init() {
   } else if (url.includes("seo")) {
     console.log("In the SEO tab");
     runSeoTab();
-
     //If run audit launch
     let isRunAudit = sessionStorage.getItem("isRunAudit");
     if (isRunAudit) {
@@ -38,7 +37,6 @@ function init() {
   } else if (url.includes("publishing")) {
     console.log("In the publishing tab");
     //runPublishingTab();
-
     //If run audit launch
     let isRunAudit = sessionStorage.getItem("isRunAudit");
     if (isRunAudit) {
@@ -122,14 +120,13 @@ function runSeoTab() {
     const sitemap = document.createElement("span");
     const robotsTxt = document.createElement("span");
     const canonical = document.createElement("span");
-
     const toggle = document.querySelectorAll(".switch-description");
     const textAreas = document.querySelectorAll("textarea");
     const canonicalBalise = document.querySelector("input[name='globalCanonicalTag']");
-    console.log(toggle);
-    console.log(textAreas);
-    console.log(canonicalBalise);
-  
+    let isIndex;
+    let isSitemap;
+    let isRobotsTxt;
+    let isCanonical;
     statusWrapper.classList.add("status-wrapper");
     index.classList.add("seo-toggle-status");
     index.setAttribute("id", "index");
@@ -147,42 +144,65 @@ function runSeoTab() {
 
     if (toggle[0].textContent.includes("enabled")) {
       index.style.color = "red";
-      index.textContent = "!!   Votre sous domaine est indéxé. ";
+      index.textContent = "❌  Votre sous domaine est indéxé. ";
       index.style.fontWeight = "bold";
+      isIndex = true;
     } else {
-      index.textContent = "=D   Votre sous-domaine est désindexé.";
+      index.textContent = "✅   Votre sous-domaine est désindexé.";
       index.style.color = "green";
       index.style.fontWeight = "bold";
+      isIndex = false;
     }
 
     if (toggle[1].textContent.includes("custom")) {
       sitemap.style.color = "red";
-      sitemap.textContent = "!!   Votre sitemap n'est pas généré. ";
+      sitemap.textContent = "❌   Votre sitemap n'est pas généré. ";
       sitemap.style.fontWeight = "bold";
+      isSitemap = false;
     } else {
-      sitemap.textContent = "=D   Votre sitemap est généré.";
+      sitemap.textContent = "✅   Votre sitemap est généré.";
       sitemap.style.color = "green";
       sitemap.style.fontWeight = "bold";
+      isSitemap = true;
     }
 
     if (textAreas[0].value === "" ) {
       robotsTxt.style.color = "red";
-      robotsTxt.textContent = "!!   Votre robots.txt est vide. ";
+      robotsTxt.textContent = "❌   Votre robots.txt est vide. ";
       robotsTxt.style.fontWeight = "bold";
+      isRobotsTxt = false;
     } else {
-      robotsTxt.textContent = "=D   Votre robots.txt est généré.";
+      robotsTxt.textContent = "✅   Votre robots.txt est généré.";
       robotsTxt.style.color = "green";
       robotsTxt.style.fontWeight = "bold";
+      isRobotsTxt = true;
     }
 
     if (canonicalBalise.value === "" ) {
       canonical.style.color = "red";
-      canonical.textContent = "!!   Votre balise canonical est vide. ";
+      canonical.textContent = "❌   Votre balise canonical est vide. ";
       canonical.style.fontWeight = "bold";
+      isCanonical = false;
     } else {
-      canonical.textContent = "=D   Votre balise canonical est générée.";
+      canonical.textContent = "✅   Votre balise canonical est générée.";
       canonical.style.color = "green";
       canonical.style.fontWeight = "bold";
+      isCanonical = true;
+    }
+
+    let isRunAudit = sessionStorage.getItem("isRunAudit");
+    if (isRunAudit) {
+      let auditResult = {
+        index : isIndex,
+        sitemap : isSitemap,
+        robotsTxt : isRobotsTxt,
+        canonical : isCanonical,
+        date : Date.now(),
+        hour : new Date().getHours(),
+      }
+      console.log(auditResult);
+      localStorage.setItem("auditResult", JSON.stringify(auditResult));
+
     }
 }
 
@@ -191,14 +211,6 @@ function runPublishingTab() {
 }
 
 function runAudit() {
-  const loader = document.createElement("div");
-  const loaderText = document.createElement("p");
-  loader.classList.add("loader");
-  loaderText.classList.add("loader-text");
-  loaderText.textContent = "Audit in progress...";
-  loader.appendChild(loaderText);
-  document.querySelector("body").appendChild(loader);
-
   const url = window.location.href;
   const urlParts = url.split("/");
   const urlLastPart = urlParts[urlParts.length - 1];
